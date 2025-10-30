@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Badminton Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="header" id="main-header">
+        <div class="container">
+            <!-- Nút mở menu (chỉ hiện trên mobile) -->
+            <button class="menu-toggle" id="menu-toggle" aria-label="Mở menu" title="Mở menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="#" class="logo">PROBADMINTON</a>
+            <nav class="main-nav">
+                <!-- Khối người dùng trong menu (mobile) -->
+                <div class="menu-user" id="menu-user">
+                    <button class="menu-user-toggle" id="menu-user-toggle" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="menu-user-name">Guest</span>
+                        <i class="fas fa-chevron-down chevron"></i>
+                    </button>
+                    <ul class="menu-user-dropdown" id="menu-user-dropdown">
+                        <li><button type="button" id="menu-user-login" class="linklike">Đăng nhập / Đăng ký</button></li>
+                        <li><button type="button" id="menu-user-logout" class="linklike hidden">Đăng xuất</button></li>
+                    </ul>
+                </div>
+                <ul>
+                    <li><a href="#">Trang chủ</a></li>
+                    <li class="dropdown">
+                        <a href="#">Vợt <i class="fas fa-chevron-down"></i></a>
+                        <ul id="dropdown-menu">
+                            <li><a href="#">Yonex</a></li>
+                            <li><a href="#">Lining</a></li>
+                            <li><a href="#">Victor</a></li>
+                            <li><a href="#">Mizuno</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Phụ kiện</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-icons">
+                <!-- 1. Ô TÌM KIẾM (desktop) -->
+                <div class="search-container">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <!-- Nút tìm kiếm (mobile) -->
+                <button class="mobile-search-btn" id="mobile-search-btn" aria-label="Tìm kiếm">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <!-- 2. GIỎ HÀNG (Thêm ID) -->
+                <a href="#" class="cart-icon" aria-label="Giỏ hàng" id="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">3</span>
+                </a>
+                
+                <!-- 3. NGƯỜI DÙNG (Nội dung động) -->
+                <div id="user-container">
+                    <!-- Trạng thái CHƯA ĐĂNG NHẬP (mặc định) -->
+                    <button id="login-register-btn" class="user-btn" aria-label="Tài khoản">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    
+                    <!-- Trạng thái ĐÃ ĐĂNG NHẬP (bị ẩn ban đầu) -->
+                    <div id="user-info" class="hidden dropdown">
+                        <span id="welcome-msg">Chào,</span>
+                        <div id="dropdown-user">
+                            <i class="fa-solid fa-circle-user"></i>
+                            <button></button>
+                            <button id="logout-btn" class="user-btn logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Đăng xuất</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay tối màn hình khi mở menu trên mobile -->
+    <div class="nav-overlay" id="nav-overlay"></div>
+
+    <!-- Thanh tìm kiếm cho mobile -->
+    <div class="mobile-search-panel" id="mobile-search-panel" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="mobile-search-inner">
+            <i class="fas fa-search"></i>
+            <input type="text" id="mobile-search-input" placeholder="Tìm kiếm sản phẩm..." />
+            <button id="mobile-search-close" aria-label="Đóng tìm kiếm"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="close-modal">&times;</button>
+            
+            <!-- Form Đăng nhập (mặc định) -->
+            <div id="login-form-container">
+                <h2>Đăng nhập</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật khẩu</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Đăng nhập</button>
+                    <p id="login-error" class="error-msg hidden"></p>
+                    <p class="toggle-form">
+                        Chưa có tài khoản? <a href="#" id="show-register">Đăng ký ngay</a>
+                    </p>
+                </form>
+            </div>
+
+            <!-- Form Đăng ký (bị ẩn) -->
+            <div id="register-form-container" class="hidden">
+                <h2>Đăng ký</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-account">Tài khoản</label>
+                        <input type="text" id="register-account" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Mật khẩu</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Xác nhận Mật khẩu</label>
+                        <input type="password" id="register-confirm-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Đăng ký</button>
+                    <p id="register-error" class="error-msg hidden"></p>
+                    <p class="toggle-form">
+                        Đã có tài khoản? <a href="#" id="show-login">Đăng nhập</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <main>
+        <div class="hero"></div>
+
+        <section class="featured-brands">
+            <div class="container">
+                <img src="https://placehold.co/150x50/png?text=YONEX" alt="Yonex Logo">
+                <img src="https://placehold.co/150x50/png?text=LINING" alt="Lining Logo">
+                <img src="https://placehold.co/150x50/png?text=VICTOR" alt="Victor Logo">
+                <img src="https://placehold.co/150x50/png?text=MIZUNO" alt="Mizuno Logo">
+            </div>
+        </section>
+
+        <section class="product-section">
+            <div class="container">
+                <h2>SẢN PHẨM NỔI BẬT</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="https://placehold.co/300x300/png?text=Astrox+100ZZ" alt="Vợt cầu lông">
+                        <span class="product-brand">Yonex</span>
+                        <h3>Yonex Astrox 100ZZ</h3>
+                        <p class="product-price">4.500.000đ</p>
+                        <a href="#" class="add-to-cart-btn">Thêm vào giỏ</a>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://placehold.co/300x300/png?text=Aeronaut+9000" alt="Vợt cầu lông">
+                        <span class="product-brand">Lining</span>
+                        <h3>Lining Aeronaut 9000</h3>
+                        <p class="product-price">4.200.000đ</p>
+                        <a href="#" class="add-to-cart-btn">Thêm vào giỏ</a>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section class="promo-banner">
+            <div class="container">
+                <h3>BỘ SƯU TẬP MỚI 2025</h3>
+                <p>Trải nghiệm tốc độ và sức mạnh vượt trội.</p>
+                <a href="#" class="cta-button">XEM NGAY</a>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2>KHÁCH HÀNG NÓI GÌ</h2>
+                <div class="testimonial-card">
+                    <p>"Dịch vụ tuyệt vời, vợt chính hãng và giao hàng rất nhanh. Sẽ ủng hộ shop lâu dài."</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <h4>- Anh Minh (Hà Nội) -</h4>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>PROBADMINTON</h3>
+                <p>Cửa hàng chuyên cung cấp vợt và phụ kiện cầu lông chính hãng hàng đầu Việt Nam.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Link nhanh</h4>
+                <ul>
+                    <li><a href="#">Về chúng tôi</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Vận chuyển</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Hỗ trợ</h4>
+                <ul>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Hướng dẫn chọn vợt</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Đăng ký nhận bản tin</h4>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Email của bạn">
+                    <button type="submit">Đăng ký</button>
+                </form>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 ProBadminton. Đã đăng ký bản quyền.</p>
+        </div>
+    </footer>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <!-- POPUP GIỎ HÀNG -->
+<div id="cart-modal" class="cart-modal hidden">
+  <div class="cart-content">
+    <button id="close-cart" class="close-cart">&times;</button>
+    <h2>Giỏ hàng của bạn</h2>
+    <div id="cart-items" class="cart-items"></div>
+
+    <div class="cart-summary">
+      <p><strong>Tổng tiền:</strong> <span id="cart-total">0đ</span></p>
+
+      <div class="address-section">
+        <h3>Địa chỉ giao hàng</h3>
+        <label><input type="radio" name="address-option" value="saved" checked> Dùng địa chỉ đã lưu</label><br>
+        <label><input type="radio" name="address-option" value="new"> Nhập địa chỉ mới</label>
+
+        <div id="new-address" class="hidden">
+          <input type="text" placeholder="Họ tên người nhận">
+          <input type="text" placeholder="Số điện thoại">
+          <textarea placeholder="Địa chỉ chi tiết"></textarea>
+        </div>
+      </div>
+
+      <div class="payment-section">
+        <h3>Hình thức thanh toán</h3>
+        <label><input type="radio" name="payment" value="cod" checked> Tiền mặt khi nhận hàng</label><br>
+        <label><input type="radio" name="payment" value="bank"> Chuyển khoản</label><br>
+        <label><input type="radio" name="payment" value="online"> Thanh toán trực tuyến</label>
+      </div>
+
+      <button id="checkout-btn" class="checkout-btn">Xem lại đơn hàng</button>
+    </div>
+  </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>
